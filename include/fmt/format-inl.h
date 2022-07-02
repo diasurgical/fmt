@@ -22,7 +22,7 @@
 #  include <locale>
 #endif
 
-#ifdef _WIN32
+#if defined(_WIN32) && !defined(NXDK)
 #  include <io.h>  // _isatty
 #endif
 
@@ -1395,7 +1395,7 @@ small_divisor_case_label:
 }
 }  // namespace dragonbox
 
-#ifdef _MSC_VER
+#if defined(_MSC_VER) && !defined(NXDK)
 FMT_FUNC auto fmt_snprintf(char* buf, size_t size, const char* fmt, ...)
     -> int {
   auto args = va_list();
@@ -1474,7 +1474,7 @@ FMT_FUNC std::string vformat(string_view fmt, format_args args) {
 }
 
 namespace detail {
-#ifdef _WIN32
+#if defined(_WIN32) && !defined(NXDK)
 using dword = conditional_t<sizeof(long) == 4, unsigned long, unsigned>;
 extern "C" __declspec(dllimport) int __stdcall WriteConsoleW(  //
     void*, const void*, dword, dword*, void*);
@@ -1499,7 +1499,7 @@ FMT_FUNC bool write_console(std::FILE* f, string_view text) {
 #endif
 
 FMT_FUNC void print(std::FILE* f, string_view text) {
-#ifdef _WIN32
+#if defined(_WIN32) && !defined(NXDK)
   if (write_console(f, text)) return;
 #endif
   detail::fwrite_fully(text.data(), 1, text.size(), f);
@@ -1512,7 +1512,7 @@ FMT_FUNC void vprint(std::FILE* f, string_view format_str, format_args args) {
   detail::print(f, {buffer.data(), buffer.size()});
 }
 
-#ifdef _WIN32
+#if defined(_WIN32) && !defined(NXDK)
 // Print assuming legacy (non-Unicode) encoding.
 FMT_FUNC void detail::vprint_mojibake(std::FILE* f, string_view format_str,
                                       format_args args) {
