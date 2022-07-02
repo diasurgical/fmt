@@ -297,7 +297,9 @@ if (FMT_PEDANTIC)
   target_compile_options(fmt PRIVATE ${PEDANTIC_COMPILE_FLAGS})
 endif ()
 
-target_compile_features(fmt PUBLIC cxx_std_11)
+if(cxx_std_11 IN_LIST CMAKE_CXX_COMPILE_FEATURES)
+  target_compile_features(fmt PUBLIC cxx_std_11)
+endif()
 
 target_include_directories(fmt ${FMT_SYSTEM_HEADERS_ATTRIBUTE} PUBLIC
   $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>

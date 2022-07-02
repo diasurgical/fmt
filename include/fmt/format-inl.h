@@ -18,7 +18,7 @@
 #  include <locale>
 #endif
 
-#ifdef _WIN32
+#if defined(_WIN32) && !defined(NXDK)
 #  include <io.h>  // _isatty
 #endif
 
@@ -1445,7 +1445,7 @@ FMT_FUNC std::string vformat(string_view fmt, format_args args) {
 }
 
 namespace detail {
-#ifndef _WIN32
+#if !defined(_WIN32) || defined(NXDK)
 FMT_FUNC bool write_console(std::FILE*, string_view) { return false; }
 #else
 using dword = conditional_t<sizeof(long) == 4, unsigned long, unsigned>;
